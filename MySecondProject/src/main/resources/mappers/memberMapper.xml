@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" " http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lectopia.practice.dao.MemberDAO">
+	<!-- <resultMap id="result" type="Member">
+		<result property="userId" column="user_id"/>
+		<result property="userPassword" column="user_password"/>
+		<result property="userName" column="user_name"/>
+		<result property="email" column="email"/>
+		<result property="regDate" column="reg_date"/>
+		<result property="updateDate" column="update_date"/>
+	</resultMap> -->
+	
+	<select id="getTime" resultType="String">
+		select sysdate from dual
+	</select>
+	
+	<insert id="insertMember" parameterType="Member">
+		INSERT INTO tbl_member(userid, userpw, username, email) values
+		(#{userId}, #{userPassword}, #{userName}, #{email})
+	</insert>
+	
+	<select id="readMember" parameterType="String" resultType="Member">
+		select * from tbl_member where userid=#{userid}
+	</select>
+</mapper>

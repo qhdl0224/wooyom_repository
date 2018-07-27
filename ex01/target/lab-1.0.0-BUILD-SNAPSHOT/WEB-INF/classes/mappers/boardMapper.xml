@@ -4,11 +4,11 @@
 <mapper namespace="com.lectopia.lab.persistence.BoardMapper">
 	<resultMap type="com.lectopia.lab.domain.BoardVO" id="board">
 		<id property="bno" column="bno" jdbcType="INTEGER"/>
-		<id property="title" column="title" jdbcType="VARCHAR2"/>
-		<id property="content" column="content" jdbcType="VARCHAR2"/>
-		<id property="writer" column="writer" jdbcType="VARCHAR2"/>
-		<id property="regdate" column="regdate" jdbcType="DATE"/>
-		<id property="viewcnt" column="viewcnt" jdbcType="INTEGER"/>
+		<id property="title" column="title" jdbcType="VARCHAR"/>
+		<id property="content" column="content" jdbcType="VARCHAR"/>
+		<id property="writer" column="writer" jdbcType="VARCHAR"/>
+		<id property="regdate" column="regdate" jdbcType="TIMESTAMP"/>
+		<id property="viewcnt" column="viewcnt" jdbcType="VARCHAR"/>
 	</resultMap>
 	
 	<sql id="columns">

@@ -1,5 +1,7 @@
 package com.lectopia.lab;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.junit.Test;
@@ -17,7 +19,7 @@ public class Test2 {
 	@Inject
 	private BoardMapper dao;
 	
-	@Test
+	//@Test
 	public void testCreate() {
 		BoardVO board = new BoardVO();
 		board.setBno(2);
@@ -32,13 +34,13 @@ public class Test2 {
 		
 	}
 	
-	@Test
+	//@Test
 	public void testRead() throws Exception
 	{
 		System.out.println(dao.read(2).toString());
 	}
 	
-	@Test
+	//@Test
 	public void testUpdate() throws Exception
 	{
 		BoardVO board = new BoardVO();
@@ -48,9 +50,19 @@ public class Test2 {
 		dao.update(board);
 	}
 	
-	@Test
+	//@Test
 	public void testDelete() throws Exception
 	{
 		dao.delete(1);
+	}
+	
+	@Test
+	public void testListPage() throws Exception
+	{
+		int page = 3;
+		List<BoardVO> list = dao.listPage(page);
+		for(BoardVO vo : list) {
+			System.out.println(vo.getBno()+":"+vo.getTitle());
+		}
 	}
 }

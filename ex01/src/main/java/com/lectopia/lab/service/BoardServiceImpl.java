@@ -21,9 +21,9 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public void get(Integer bno) throws Exception {
+	public BoardVO get(Integer bno) throws Exception {
 		// TODO Auto-generated method stub
-		mapper.read(bno);
+		return mapper.read(bno);
 	}
 
 	@Override

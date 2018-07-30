@@ -10,4 +10,5 @@ public interface BoardMapper {
 	public void update(BoardVO vo) throws Exception;
 	public void delete(Integer bno) throws Exception;
 	public List<BoardVO> listAll() throws Exception;
+	public List<BoardVO> listPage(int page) throws Exception;
 }

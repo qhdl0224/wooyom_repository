@@ -30,6 +30,11 @@
 		<property name="sqlSessionFactory" ref="SessionFactory"></property>
 	</bean>
 	
+	<bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.lectopia.lab.persistence.UserMapper"/>
+		<property name="sqlSessionFactory" ref="SessionFactory"></property>
+	</bean>
+	
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
 		<constructor-arg name="sqlSessionFactory" ref="SessionFactory"></constructor-arg>
 	</bean>

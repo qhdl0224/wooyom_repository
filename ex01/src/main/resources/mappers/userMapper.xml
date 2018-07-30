@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.lectopia.lab.persistence.UserMapper">
+	 <resultMap type="com.lectopia.lab.domain.UserVO" id="user">
+	 	<id property="idx" column="idx" jdbcType="INTEGER" />
+	 	<id property="userid" column="userid" jdbcType="VARCHAR" />
+	 	<id property="userpwd" column="userpwd" jdbcType="VARCHAR" />
+	 	<id property="regdate" column="regdate" jdbcType="TIMESTAMP" />
+	 </resultMap>
+	 
+	 <select id="login" parameterType="string" resultMap="user">
+	 select *
+	 from 	tbl_user
+	 where 	userid = #{userid}
+	 </select>
+</mapper>  
+

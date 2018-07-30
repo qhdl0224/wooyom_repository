@@ -29,8 +29,19 @@
   </head>
       <!-- jQuery 2.1.4 -->
     <script src="/resources/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <script>
+    $(document).ready(function(e){
+    	 $("#logout-btn").on("click", function(){
+    		 $('#logout').attr("action", "/logout");
+				$('#logout').attr("method", "post");		
+				$('#logout').submit();
+ 		});
+    });
+	   
     
+    </script>
   <body class="skin-blue sidebar-mini">
+ 
     <div class="wrapper">
       
       <header class="main-header">
@@ -43,6 +54,7 @@
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
+      
           <!-- Sidebar toggle button-->
           <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
@@ -284,6 +296,9 @@
               </li>
             </ul>
           </div>
+            <form id="logout">
+         <button id="logout-btn">로그아웃</button>
+         </form>
         </nav>
       </header>
       <!-- Left side column. contains the logo and sidebar -->
@@ -396,6 +411,9 @@
                 <small class="label pull-right bg-red">3</small>
               </a>
             </li>
+            
+            	
+            
             <li>
               <a href="../mailbox/mailbox.html">
                 <i class="fa fa-envelope"></i> <span>Mailbox</span>
@@ -449,7 +467,7 @@
         </section>
         <!-- /.sidebar -->
       </aside>
-
+	
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
         <!-- Content Header (Page header) -->

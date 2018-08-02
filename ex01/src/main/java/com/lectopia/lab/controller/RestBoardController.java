@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,10 +59,16 @@ public class RestBoardController {
 	
 	
 
-	@RequestMapping(value="/add", method=RequestMethod.GET)
+	@RequestMapping(value="/add", method= {RequestMethod.GET, RequestMethod.POST})
 	public String add(BoardVO vo) throws Exception {
-		service.regist(vo);
-		return "OK"; 
+		
+		try {
+			service.regist(vo);
+			return "{\"result\": \"OK\"}";
+			
+		} catch(Exception e) {
+			return "{\"result\": \"NG\"}";
+		}
 	}
 	
 	

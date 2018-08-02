@@ -45,7 +45,7 @@ public class UserController {
 				if(dbUserVO.getUserpwd().equals(MD5Util.GET_CRYPTO_MD5( vo.getUserpwd()))) {
 				//if(dbUserVO.getUserpwd().equals( vo.getUserpwd())) {
 					session.setAttribute("login",vo.getUserid());
-					return "redirect:/board/listAll";
+					return "redirect:/sboard/list";
 				}else {
 					model.addAttribute("error", "wrong_userpwd");
 					return "/login";

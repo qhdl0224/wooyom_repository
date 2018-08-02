@@ -8,19 +8,68 @@
 		<id property="content" column="content" jdbcType="VARCHAR"/>
 		<id property="writer" column="writer" jdbcType="VARCHAR"/>
 		<id property="regdate" column="regdate" jdbcType="TIMESTAMP"/>
-		<id property="viewcnt" column="viewcnt" jdbcType="VARCHAR"/>
+		<id property="viewcnt" column="viewcnt" jdbcType="INTEGER"/>
+		<id property="filename" column="filename" jdbcType="VARCHAR"/>
+		<id property="filesize" column="filesize" jdbcType="INTEGER"/>
+		<id property="oldname" column="oldname" jdbcType="VARCHAR"/>
 	</resultMap>
 	
 	<sql id="columns">
-		bno, title, content, writer, regdate, viewcnt
+		bno, title, content, writer, regdate, viewcnt, filename, filesize,oldname
 		<!-- date_format(regdate,'%Y-%m-%d %H:%i:%S') as regdate_str 오라클엔 적용안될수도;;-->
 	</sql>
 	
-	<insert id="create">
-	insert into tbl_board(bno,title,content,writer) 
-	values(#{bno},#{title},#{content},#{writer})
-	</insert>
+	<sql id="search">
+		<where>
+          	<if test="searchType != null">
+          		<if test="searchType =='t'.toString()">
+				 AND title LIKE '%${keyword}%'
+          		</if>
+			</if>
+			
+			
+          	<if test="searchType != null">
+          		<if test="searchType =='c'.toString()">
+				 AND content LIKE '%${keyword}%'
+          		</if>
+			</if>
+			
+			
+          	<if test="searchType != null">
+          		<if test="searchType =='w'.toString()">
+				 AND writer LIKE '%${keyword}%'
+          		</if>
+			</if>
+			
+			
+          	<if test="searchType != null">
+          		<if test="searchType =='tc'.toString()">
+				 AND (title LIKE '%${keyword}%') OR content LIKE '%${keyword}%'
+          		</if>
+			</if>
+			
+			<if test="searchType != null">
+          		<if test="searchType =='cw'.toString()">
+				 AND (content LIKE '%${keyword}%') OR writer LIKE '%${keyword}%'
+          		</if>
+			</if>
+			
+			<if test="searchType != null">
+          		<if test="searchType =='tcw'.toString()">
+				 AND (title LIKE '%${keyword}%' 
+				OR content LIKE '%${keyword}%'
+				OR writer LIKE '%${keyword}%')
+          		</if>
+			</if>
+		</where>
 	
+	</sql>
+	
+	<insert id="create">
+	insert into tbl_board(bno,title,content,writer,filename,filesize,oldname) 
+	values(myfirst_seq.nextval,#{title},#{content},#{writer},#{filename},#{filesize},#{oldname})
+	</insert>
+	<!-- my_board.nextval -->
 	<select id="read" resultMap="board">
 		select <include refid="columns"/>
 			bno, title, content, writer, regdate, viewcnt
@@ -30,7 +79,9 @@
 	</select>
 	
 	<update id="update">
-		update tbl_board set title=#{title}, content=#{content}, writer=#{writer} where bno=#{bno}
+		update tbl_board set title=#{title}, content=#{content}, writer=#{writer},
+		filename=#{filename}, filesize=#{filesize}, oldname=#{oldname} 
+		where bno=#{bno}
 	</update>
 	
 	<delete id="delete">
@@ -45,12 +96,98 @@
 		order by bno desc, regdate desc
 	</select>
 	
-	<select id="listPage" parameterType="int" resultType="com.lectopia.lab.domain.BoardVO"><!-- 이상할수도있음 -->
-		SELECT *
-		FROM tbl_board
-		WHERE rownum>= ${page}
-		
-		
+	<select  id="readList" parameterType="Integer" resultMap="board"> 
+		SELECT
+			<include refid="columns"/> 
+		FROM ( select /*+ FIRST_ROWS(10) */ 
+         a.<include refid="columns"/>, ROWNUM rnum 
+       	FROM
+         (SELECT <include refid="columns"/> FROM tbl_board order by bno DESC) a
+       	WHERE
+         ROWNUM &lt;= #{pageNum} * 10)
+		WHERE
+ 		 rnum  &gt;= (#{pageNum} -1) * 10 + 1
 	</select>
+	
+	<select  id="listCriteria"  resultMap="board"> 
+		SELECT
+			<include refid="columns"/> 
+		FROM ( select /*+ FIRST_ROWS(10) */ 
+         a.<include refid="columns"/>, ROWNUM rnum 
+       	FROM
+         (SELECT <include refid="columns"/> FROM tbl_board order by bno DESC) a
+       	WHERE
+         ROWNUM &lt;= #{page} * #{perPageNum})
+		WHERE
+ 		 rnum  &gt;= (#{page} -1) * #{perPageNum} + 1
+	</select>
+	
+	
+	<select id="readIndex" resultType="Integer">
+		SELECT 
+			LAST_NUMBER 
+		FROM 
+			USER_SEQUENCES   
+		WHERE 
+			SEQUENCE_NAME = UPPER('id_seq')
+	</select>
+	
+	<select id="searchByCondition" parameterType="map" resultMap="board">
+		SELECT
+			<include refid="columns"/> 
+		FROM ( select /*+ FIRST_ROWS(10) */ 
+         a.<include refid="columns"/>, ROWNUM rnum 
+       	FROM
+         (SELECT <include refid="columns"/> FROM tbl_board 
+          <where>
+          	<if test="title != null">
+				AND title LIKE '%${keyword}%'
+			</if>
+			<if test="content != null">
+				AND content LIKE '%${keyword}%'
+			</if>
+			<if test="writer != null">
+				AND writer LIKE '%${keyword}%'
+			</if>
+          </where>
+         ORDER BY bno DESC) a
+       	WHERE
+         ROWNUM &lt;= #{pageNum} * 10)
+		WHERE
+ 		 rnum  &gt;= (#{pageNum} -1) * 10 + 1
+
+	</select>
+	
+	<select id="countPaging" resultType="int">
+		select
+			count(bno)
+		from
+			tbl_board
+		where
+			bno>0	
+	</select>
+	
+	<select id="listSearch" resultMap="board">
+			SELECT
+			<include refid="columns"/> 
+		FROM ( select  
+         a.<include refid="columns"/>, ROWNUM rnum 
+       	FROM
+         (SELECT <include refid="columns"/> FROM tbl_board 
+         <include refid="search"></include>
+         order by bno DESC) a
+       	WHERE
+         ROWNUM &lt;= #{page} * #{perPageNum})
+		WHERE
+ 		 rnum  &gt;= (#{page} -1) * #{perPageNum} + 1
+	</select>
+	
+	<select id="listSearchCount" resultType="int">
+		select count(bno)
+		from tbl_board
+		 <include refid="search"></include>
+	</select>
+	
+	
 	
 </mapper>

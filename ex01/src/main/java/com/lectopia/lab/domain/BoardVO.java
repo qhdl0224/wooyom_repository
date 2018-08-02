@@ -9,13 +9,17 @@ public class BoardVO {
 	private String writer;
 	private Date regdate;
 	private int viewcnt;
-	
+	private String filename;
+	private int filesize;
+	private String oldname;
 
 
 	public BoardVO() {
 		super();
 	}
-	public BoardVO(Integer bno, String title, String content, String writer, Date regdate, int viewcnt) {
+	
+	public BoardVO(Integer bno, String title, String content, String writer, Date regdate, int viewcnt, String filename,
+			int filesize, String oldname) {
 		super();
 		this.bno = bno;
 		this.title = title;
@@ -23,7 +27,11 @@ public class BoardVO {
 		this.writer = writer;
 		this.regdate = regdate;
 		this.viewcnt = viewcnt;
+		this.filename = filename;
+		this.filesize = filesize;
+		this.oldname = oldname;
 	}
+
 	public Integer getBno() {
 		return bno;
 	}
@@ -61,9 +69,38 @@ public class BoardVO {
 		this.viewcnt = viewcnt;
 	}
 	
+	
+	
+	public String getFilename() {
+		return filename;
+	}
+
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+
+	public int getFilesize() {
+		return filesize;
+	}
+
+	public void setFilesize(int filesize) {
+		this.filesize = filesize;
+	}
+
+	public String getOldname() {
+		return oldname;
+	}
+
+	public void setOldname(String oldname) {
+		this.oldname = oldname;
+	}
+
 	@Override
 	public String toString() {
 		return "BoardVO [bno=" + bno + ", title=" + title + ", content=" + content + ", writer=" + writer + ", regdate="
-				+ regdate + ", viewcnt=" + viewcnt + "]";
+				+ regdate + ", viewcnt=" + viewcnt + ", filename=" + filename + ", filesize=" + filesize + ", oldname="
+				+ oldname + "]";
 	}
+
+	
 }

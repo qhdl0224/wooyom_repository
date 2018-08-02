@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lectopia.lab.domain.BoardVO;
+import com.lectopia.lab.domain.Criteria;
+import com.lectopia.lab.domain.SearchCriteria;
 import com.lectopia.lab.persistence.BoardMapper;
 
 @Service
@@ -44,5 +46,25 @@ public class BoardServiceImpl implements BoardService {
 		// TODO Auto-generated method stub
 		return mapper.listAll();
 	}
-
+	
+	//page¿ë
+	@Override
+	public List<BoardVO> listCriteria(Criteria cri) throws Exception{
+		
+		return mapper.listCriteria(cri);
+	}
+	@Override
+	public int listCountCriteria(Criteria cri)throws Exception{
+		return mapper.countPaging(cri);
+	}
+	@Override
+	public List<BoardVO> listSearchCriteria(SearchCriteria cri) throws Exception{
+		return mapper.listSearch(cri);
+	}
+	@Override
+	public int listSearchCount(SearchCriteria cri) throws Exception
+	{
+		return mapper.listSearchCount(cri);
+	}
+	
 }

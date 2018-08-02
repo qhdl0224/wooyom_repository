@@ -10,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.lectopia.lab.domain.BoardVO;
+import com.lectopia.lab.domain.Criteria;
 import com.lectopia.lab.persistence.BoardMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -56,13 +57,27 @@ public class Test2 {
 		dao.delete(1);
 	}
 	
-	@Test
+	//@Test
 	public void testListPage() throws Exception
 	{
-		int page = 3;
-		List<BoardVO> list = dao.listPage(page);
+		int page = 1;
+		List<BoardVO> list = dao.readList(page);
 		for(BoardVO vo : list) {
 			System.out.println(vo.getBno()+":"+vo.getTitle());
 		}
 	}
+	@Test
+	public void testListCriteria() throws Exception
+	{
+		Criteria cri = new Criteria();
+		cri.setPage(2);
+		cri.setPerPageNum(20);
+		List<BoardVO> list = dao.listCriteria(cri);
+		for(BoardVO vo : list) {
+			System.out.println(vo.getBno()+":"+vo.getTitle());
+		}
+	}
+	
+	
+	
 }
